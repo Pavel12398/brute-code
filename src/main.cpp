@@ -1,43 +1,23 @@
 #include <iostream>
+#include "singleton.h"
+#include "utility.h"
 
-// Пузырьковая сортировка
-int bSort(int a[], int nSize) {
-    while (nSize--) {
-        bool swapped = false;
-        for (int i = 0; i < nSize; i++) {
-            if (a[i] > a[i + 1]) {
-                std::swap(a[i], a[i + 1]);
-                swapped = true;
-            }
-        }
-        if (!swapped)
-            break;
+using namespace helper;
+
+class Foo
+{
+    DECLARE_SINGLETON(Foo)
+public:
+    Foo() {
     }
-    return 0;
-}
-
-// Бинарный поиск
-int binSearch(int a[], int left, int right, int key) {
-
-    int n = 0;
-    while (1) {
-        n = (left + right) / 2;
-        if (key < a[n]) {
-            right = n - 1;
-        }
-        else if (key > a[n]) {
-            left = n + 1;
-        }
-        else {
-            return n;
-        }
-
-        if (left > right)
-            return -1;
+    ~Foo() {
     }
 
-    return -1;
-}
+    void print(const char *str) {
+        std::cout << str << std::endl;
+    }
+};
+INSTANCE_SINGLETON(Foo)
 
 
 int main(int argc, char** argv) {
@@ -55,7 +35,7 @@ int main(int argc, char** argv) {
 
     bSort(pList, nSize);
 
-    // Отсортерованный список
+    // Отсортированный список
     std::cout << "Sorted array..."<< std::endl;
     for (int i = 0; i < nSize; i++)
         std::cout  << pList[i] << " ";
@@ -67,6 +47,11 @@ int main(int argc, char** argv) {
         std::cout << "Found: " << pList[nIndex] << std::endl;
     else
         std::cout << "Not found " << std::endl;
+
+
+    SINGLETON_CREATE_INIT(Foo)
+    Foo::GetInstance()->print("Hello Instance");
+
 
     return 0;
 }
